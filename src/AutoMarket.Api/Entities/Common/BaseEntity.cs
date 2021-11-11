@@ -9,6 +9,7 @@ namespace AutoMarket.Api.Entities.Common
         public DateTime CreateDate { get; private set; }
         public DateTime? UpdateDate { get; private set; }
         public RecordStatuses Status { get; private set; }
+        public byte[] RowVersion { get; set; }
 
         public void Add()
         {
