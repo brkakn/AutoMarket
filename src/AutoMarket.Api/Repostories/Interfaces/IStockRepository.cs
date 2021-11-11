@@ -1,6 +1,8 @@
-﻿namespace AutoMarket.Api.Repostories.Interfaces
+﻿using AutoMarket.Api.Entities;
+
+namespace AutoMarket.Api.Repostories.Interfaces
 {
-    public interface IStockRepository
+    public interface IStockRepository : IGenericRepository<StockEntity>
     {
     }
 }

@@ -1,9 +1,10 @@
-﻿using AutoMarket.Api.Infrastructures.Database;
+﻿using AutoMarket.Api.Entities;
+using AutoMarket.Api.Infrastructures.Database;
 using AutoMarket.Api.Repostories.Interfaces;
 
 namespace AutoMarket.Api.Repostories
 {
-    public class UserRepository : GenericRepository<UserRepository>, IUserRepository
+    public class UserRepository : GenericRepository<UserEntity>, IUserRepository
     {
         private readonly AutoMarketDbContext _dbContext;
 

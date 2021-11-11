@@ -1,9 +1,10 @@
-﻿using AutoMarket.Api.Infrastructures.Database;
+﻿using AutoMarket.Api.Entities;
+using AutoMarket.Api.Infrastructures.Database;
 using AutoMarket.Api.Repostories.Interfaces;
 
 namespace AutoMarket.Api.Repostories
 {
-    public class BasketDetailRepository : GenericRepository<BasketDetailRepository>, IBasketDetailRepository
+    public class BasketDetailRepository : GenericRepository<BasketDetailEntity>, IBasketDetailRepository
     {
         private readonly AutoMarketDbContext _dbContext;
 
