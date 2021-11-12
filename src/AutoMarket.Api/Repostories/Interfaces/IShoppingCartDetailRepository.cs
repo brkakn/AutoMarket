@@ -2,7 +2,7 @@
 
 namespace AutoMarket.Api.Repostories.Interfaces
 {
-    public interface IBasketRepository : IGenericRepository<BasketEntity>
+    public interface IShoppingCartDetailRepository : IGenericRepository<ShoppingCartDetailEntity>
     {
     }
 }

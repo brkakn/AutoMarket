@@ -12,8 +12,8 @@ namespace AutoMarket.Api.Infrastructures.Database
         public virtual DbSet<UserEntity> Users { get; set; }
         public virtual DbSet<ItemEntity> Items { get; set; }
         public virtual DbSet<StockEntity> Stocks { get; set; }
-        public virtual DbSet<BasketEntity> Baskets { get; set; }
-        public virtual DbSet<BasketDetailEntity> BasketDetails { get; set; }
+        public virtual DbSet<ShoppingCartEntity> ShoppingCarts { get; set; }
+        public virtual DbSet<ShoppingCartDetailEntity> ShoppingCartDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,17 +35,17 @@ namespace AutoMarket.Api.Infrastructures.Database
                  .HasForeignKey(x => x.ItemId);
             });
 
-            modelBuilder.Entity<BasketEntity>(e =>
+            modelBuilder.Entity<ShoppingCartEntity>(e =>
             {
                 e.HasKey(x => x.Id);
             });
 
-            modelBuilder.Entity<BasketDetailEntity>(e =>
+            modelBuilder.Entity<ShoppingCartDetailEntity>(e =>
             {
                 e.HasKey(x => x.Id);
-                e.HasOne(x => x.Basket)
-                 .WithMany(x => x.BasketDetails)
-                 .HasForeignKey(x => x.BasketId);
+                e.HasOne(x => x.ShoppingCart)
+                 .WithMany(x => x.ShoppingCartDetails)
+                 .HasForeignKey(x => x.ShoppingCartId);
             });
         }
     }
