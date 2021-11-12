@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutoMarket.Api.Models
+namespace AutoMarket.Api.Features.Authenticate.Models
 {
     public class TokenModel
     {

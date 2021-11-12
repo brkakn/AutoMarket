@@ -1,5 +1,5 @@
 ﻿using AutoMarket.Api.Features.Authenticate.Commands;
-using AutoMarket.Api.Models;
+using AutoMarket.Api.Features.Authenticate.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace AutoMarket.Api.Features.Authenticate
 
         [HttpPost]
         [Consumes("application/x-www-form-urlencoded")]
-        public async Task<IActionResult> Post([FromBody]LoginModel model)
+        public async Task<IActionResult> Post([FromForm] LoginModel model)
         {
             var tokenModel = await _mediator.Send(new AuthenticateCommand(model.username, model.password));
             return Ok(tokenModel);

@@ -33,7 +33,7 @@ namespace AutoMarket.Api.Middlewares
                 if (body.CanSeek)
                 {
                     body.Seek(0, SeekOrigin.Begin);
-                    payload = new StreamReader(body).ReadToEnd();
+                    payload = body.Length != 0 ? new StreamReader(body).ReadToEnd() : "";
                 }
 
                 var log = new

@@ -1,4 +1,6 @@
-﻿using AutoMarket.Api.Models;
+﻿using AutoMarket.Api.Features.Authenticate.Models;
+using AutoMarket.Api.Helpers;
+using AutoMarket.Api.Models;
 using AutoMarket.Api.Models.Exceptions;
 using AutoMarket.Api.Repostories.Interfaces;
 using MediatR;
@@ -6,7 +8,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AutoMarket.Api.Features.Authenticate.Commands
 {
@@ -22,7 +28,7 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
         public string Password { get; set; }
     }
 
-    public class AuthenticateCommandHandler : RequestHandler<AuthenticateCommand, TokenModel>
+    public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, TokenModel>
     {
         private readonly AppSettingsModel _appSettingsModel;
         private readonly IUserRepository _userRepository;
@@ -33,22 +39,18 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
             _userRepository = userRepository;
         }
 
-        protected override TokenModel Handle(AuthenticateCommand request)
+        public async Task<TokenModel> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
         {
-            //var user = _users.SingleOrDefault(u => u.Username == request.UserName && u.Password == request.Password);
-            //if (user == null)
-            //    throw new BadRequestException("UserName or Password wrong!");
+            var user = await _userRepository.AuthenticateUser(request.UserName, request.Password, cancellationToken);
+            if (user == null)
+                throw new BadRequestException("UserName or Password wrong!");
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettingsModel.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var token = SecurityHelper.GenerateToken(user, _appSettingsModel.Secret);
+
+            var tokenModel = new TokenModel()
             {
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                access_token = token
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenModel = new TokenModel();
-            tokenModel.access_token = tokenHandler.WriteToken(token);
 
             return tokenModel;
         }

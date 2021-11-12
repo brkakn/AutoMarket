@@ -7,6 +7,7 @@ using AutoMarket.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,10 @@ namespace AutoMarket.Api
             services.AddDbContext<AutoMarketDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "AutoMarketDb"));
             services.AddRedisManager(Configuration)
                 .AddAutoMapper()
+                .AddUserModel(Configuration)
+                .AddRepositories()
                 .AddMediatR(Assembly.Load(CommonConstants.SERVICE_NAME))
+                .AddApiVersion()
                 .AddControllers();
 
             Log.Logger = LoggingHelper.CustomLoggerConfiguration(Configuration);
@@ -55,8 +59,6 @@ namespace AutoMarket.Api
             }
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseMiddleware<TokenMiddleware>();
