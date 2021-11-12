@@ -31,7 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Basket\" />
+    <Folder Include="Features\Item\" />
+    <Folder Include="Features\ShoppingCart\" />
   </ItemGroup>
 
 </Project>

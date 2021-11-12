@@ -20,11 +20,13 @@ namespace AutoMarket.Api.Infrastructures.Database
             modelBuilder.Entity<UserEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<ItemEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<StockEntity>(e =>
@@ -33,11 +35,13 @@ namespace AutoMarket.Api.Infrastructures.Database
                 e.HasOne(x => x.Item)
                  .WithMany(x => x.Stocks)
                  .HasForeignKey(x => x.ItemId);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<ShoppingCartEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<ShoppingCartDetailEntity>(e =>
@@ -46,6 +50,7 @@ namespace AutoMarket.Api.Infrastructures.Database
                 e.HasOne(x => x.ShoppingCart)
                  .WithMany(x => x.ShoppingCartDetails)
                  .HasForeignKey(x => x.ShoppingCartId);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMarket.Api.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoMarket.Api.Entities.Common
 {
@@ -9,6 +10,7 @@ namespace AutoMarket.Api.Entities.Common
         public DateTime CreateDate { get; private set; }
         public DateTime? UpdateDate { get; private set; }
         public RecordStatuses Status { get; private set; }
+        [Timestamp]
         public byte[] RowVersion { get; set; }
 
         public void Add()

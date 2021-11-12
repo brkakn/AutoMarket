@@ -1,5 +1,6 @@
 ﻿using AutoMarket.Api.Models;
 using AutoMarket.Api.Models.Exceptions;
+using AutoMarket.Api.Repostories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,10 +25,12 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
     public class AuthenticateCommandHandler : RequestHandler<AuthenticateCommand, TokenModel>
     {
         private readonly AppSettingsModel _appSettingsModel;
+        private readonly IUserRepository _userRepository;
 
-        public AuthenticateCommandHandler(IOptions<AppSettingsModel> appSettings)
+        public AuthenticateCommandHandler(IOptions<AppSettingsModel> appSettings, IUserRepository userRepository)
         {
             _appSettingsModel = appSettings.Value;
+            _userRepository = userRepository;
         }
 
         protected override TokenModel Handle(AuthenticateCommand request)

@@ -12,5 +12,6 @@ namespace AutoMarket.Api.Repostories
         {
             _dbContext = dbContext;
         }
+
     }
 }
