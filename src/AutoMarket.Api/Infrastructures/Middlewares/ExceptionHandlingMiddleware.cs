@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace AutoMarket.Api.Middlewares
+namespace AutoMarket.Api.Infrastructures.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {

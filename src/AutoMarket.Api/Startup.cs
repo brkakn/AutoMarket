@@ -2,17 +2,14 @@ using AutoMarket.Api.Constants;
 using AutoMarket.Api.Extensions;
 using AutoMarket.Api.Helpers;
 using AutoMarket.Api.Infrastructures.Database;
-using AutoMarket.Api.Middlewares;
 using AutoMarket.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
 
@@ -38,14 +35,10 @@ namespace AutoMarket.Api
                 .AddRepositories()
                 .AddMediatR(Assembly.Load(CommonConstants.SERVICE_NAME))
                 .AddApiVersion()
+                .AddSwagger()
                 .AddControllers();
 
             Log.Logger = LoggingHelper.CustomLoggerConfiguration(Configuration);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = CommonConstants.SERVICE_NAME, Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,11 +52,7 @@ namespace AutoMarket.Api
             }
 
             app.UseRouting();
-
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
-            app.UseMiddleware<TokenMiddleware>();
-            app.UseMiddleware<RequestPerformanceMiddleware>();
-
+            app.UseMiddlewares();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

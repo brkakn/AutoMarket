@@ -4,13 +4,16 @@ using AutoMarket.Api.Helpers;
 using AutoMarket.Api.Infrastructures.Cache;
 using AutoMarket.Api.Infrastructures.Cache.Redis;
 using AutoMarket.Api.Infrastructures.Mapper;
+using AutoMarket.Api.Infrastructures.Middlewares;
 using AutoMarket.Api.Models;
 using AutoMarket.Api.Repostories;
 using AutoMarket.Api.Repostories.Interfaces;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Linq;
 
@@ -77,6 +80,7 @@ namespace AutoMarket.Api.Extensions
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             var settings = new AppSettingsModel();
 
             configuration.Bind("AppSettings", settings);
@@ -84,16 +88,59 @@ namespace AutoMarket.Api.Extensions
             services.AddScoped(sp =>
             {
                 var httpContext = (sp.GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor)?.HttpContext;
-                if (httpContext == null || !httpContext.Request.Headers.ContainsKey("token"))
+                if (httpContext == null || !httpContext.Request.Headers.ContainsKey("Authorization"))
                     return null;
 
-                string token = httpContext.Request.Headers.FirstOrDefault(e => e.Key == "token").Value.ToString();
+                string token = httpContext.Request.Headers.FirstOrDefault(e => e.Key == "Authorization").Value.ToString();
                 var model = SecurityHelper.ValidateToken(token, settings.Secret);
 
                 return model;
             });
 
             return services;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = CommonConstants.SERVICE_NAME, Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Scheme = "Bearer",
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+                        }
+                    });
+            });
+            return services;
+        }
+
+        public static IApplicationBuilder UseMiddlewares (this IApplicationBuilder app)
+        {
+            if(app == null)
+                throw new ArgumentNullException(nameof(app)); ;
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseMiddleware<TokenMiddleware>();
+            app.UseMiddleware<RequestPerformanceMiddleware>();
+
+            return app;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AutoMarket.Api.Features.Authenticate
 {
     [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/authenticate")]
     [ApiController]
     public class AuthenticateController : ControllerBase
     {

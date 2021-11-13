@@ -30,9 +30,4 @@
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Item\" />
-    <Folder Include="Features\ShoppingCart\" />
-  </ItemGroup>
-
 </Project>

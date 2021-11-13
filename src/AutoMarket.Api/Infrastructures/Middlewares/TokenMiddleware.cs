@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AutoMarket.Api.Middlewares
+namespace AutoMarket.Api.Infrastructures.Middlewares
 {
     public class TokenMiddleware
     {

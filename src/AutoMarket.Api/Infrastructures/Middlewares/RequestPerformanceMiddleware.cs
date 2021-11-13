@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoMarket.Api.Middlewares
+namespace AutoMarket.Api.Infrastructures.Middlewares
 {
     public class RequestPerformanceMiddleware
     {
