@@ -13,14 +13,12 @@ namespace AutoMarket.Api.Features.ShoppingCart.Queries
 {
     public class GetShoppingCartQuery : IRequest<ShoppingCartModel>
     {
-        public GetShoppingCartQuery(long userId, long cartId)
+        public GetShoppingCartQuery(long userId)
         {
             UserId = userId;
-            CartId = cartId;
         }
 
         public long UserId { get; set; }
-        public long CartId { get; set; }
     }
 
     public class GetShoppingCartQueryHandler : IRequestHandler<GetShoppingCartQuery, ShoppingCartModel>
@@ -39,7 +37,7 @@ namespace AutoMarket.Api.Features.ShoppingCart.Queries
             var shoppingCart = await _shoppingCartRepository.Query()
                 .Include(e => e.ShoppingCartDetails)
                 .ThenInclude(e => e.Item)
-                .Where(e => e.Id == request.CartId && e.UserId == request.UserId && e.Status == RecordStatuses.ACTIVE)
+                .Where(e => e.UserId == request.UserId && e.Status == RecordStatuses.ACTIVE)
                 .FirstOrDefaultAsync(ct);
 
             if (shoppingCart == null)

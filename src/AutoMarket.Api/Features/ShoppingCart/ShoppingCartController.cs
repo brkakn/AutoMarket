@@ -60,10 +60,10 @@ namespace AutoMarket.Api.Features.ShoppingCart
             return Ok(await _mediator.Send(command, _httpContext.RequestAborted));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(long id)
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            return Ok(await _mediator.Send(new GetShoppingCartQuery(_userModel.Id, id)));
+            return Ok(await _mediator.Send(new GetShoppingCartQuery(_userModel.Id)));
         }
     }
 }
