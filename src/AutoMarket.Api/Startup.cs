@@ -52,6 +52,19 @@ namespace AutoMarket.Api
             }
 
             app.UseRouting();
+
+            app.MapWhen(x => (x.Request.Path.ToString().ToUpperInvariant().EndsWith("/AUTHENTICATE")), appBuilder =>
+            {
+                appBuilder.Run(appBuilder
+                    .UseRouting()
+                    .UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapControllerRoute(
+                            name: "v1",
+                            pattern: "v1/{controller}/{action}/{id}");
+                    }).Build());
+            });
+
             app.UseMiddlewares();
             app.UseEndpoints(endpoints =>
             {

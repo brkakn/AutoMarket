@@ -1,5 +1,7 @@
-﻿using AutoMarket.Api.Features.Authenticate.Models;
+﻿using AutoMarket.Api.Constants;
+using AutoMarket.Api.Features.Authenticate.Models;
 using AutoMarket.Api.Helpers;
+using AutoMarket.Api.Infrastructures.Cache;
 using AutoMarket.Api.Models;
 using AutoMarket.Api.Models.Exceptions;
 using AutoMarket.Api.Repostories.Interfaces;
@@ -32,11 +34,16 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
     {
         private readonly AppSettingsModel _appSettingsModel;
         private readonly IUserRepository _userRepository;
+        private readonly ICacheService _cacheService;
 
-        public AuthenticateCommandHandler(IOptions<AppSettingsModel> appSettings, IUserRepository userRepository)
+        public AuthenticateCommandHandler(
+            IOptions<AppSettingsModel> appSettings,
+            IUserRepository userRepository,
+            ICacheService cacheService)
         {
             _appSettingsModel = appSettings.Value;
             _userRepository = userRepository;
+            _cacheService = cacheService;
         }
 
         public async Task<TokenModel> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
@@ -47,12 +54,9 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
 
             var token = SecurityHelper.GenerateToken(user, _appSettingsModel.Secret);
 
-            var tokenModel = new TokenModel()
-            {
-                access_token = token
-            };
+            await _cacheService.Add($"{CacheConstants.UserInfo}{user.Id}", token, TimeSpan.FromHours(6));
 
-            return tokenModel;
+            return new TokenModel(token);
         }
     }
 }
