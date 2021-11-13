@@ -31,8 +31,8 @@ namespace AutoMarket.Api.Helpers
                 clientConfiguration.DeliveryMode = RabbitMQDeliveryMode.Durable;
                 clientConfiguration.Port = rabbitMqConfigModel.Port;
                 clientConfiguration.VHost = "/";
-                clientConfiguration.Hostnames.Add("localhost");
-                sinkConfiguration.RestrictedToMinimumLevel = LogEventLevel.Information;
+                clientConfiguration.Hostnames.Add(rabbitMqConfigModel.Hostname);
+                sinkConfiguration.RestrictedToMinimumLevel = LogEventLevel.Warning;
                 sinkConfiguration.TextFormatter = new JsonFormatter();
             })
             .CreateLogger();

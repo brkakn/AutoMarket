@@ -26,11 +26,17 @@ namespace AutoMarket.Api.Repostories
             return _dbContext.Set<T>().AsQueryable();
         }
 
-        public async Task<IList<T>> GetAllAsync(bool hasTracking = false, CancellationToken ct = default)
+        public async Task<IList<T>> GetAllAsync(bool hasTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includeProperties)
         {
+            var query = _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE);
+            foreach (var includeProperty in includeProperties)
+            {
+                query.Include(includeProperty);
+            }
+
             return hasTracking
-                ? await _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE).ToListAsync()
-                : await _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE).AsNoTracking().ToListAsync();
+                ? await query.ToListAsync(ct)
+                : await query.AsNoTracking().ToListAsync(ct);
         }
 
         public async Task<T> GetAsync(int id, CancellationToken ct = default)
@@ -38,11 +44,17 @@ namespace AutoMarket.Api.Repostories
             return await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.Status == RecordStatuses.ACTIVE);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = false, CancellationToken ct = default)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = true, CancellationToken ct = default, params Expression<Func<T, object>>[] includeProperties)
         {
+            var query = _dbContext.Set<T>().Where(predicate);
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
             return hasTracking
-                ? await _dbContext.Set<T>().Where(predicate).FirstOrDefaultAsync()
-                : await _dbContext.Set<T>().AsNoTracking().Where(predicate).FirstOrDefaultAsync();
+                ? await query.FirstOrDefaultAsync(ct)
+                : await query.AsNoTracking().FirstOrDefaultAsync(ct);
         }
 
         public async Task<bool> ExistAsync(int id, CancellationToken ct = default)
@@ -73,6 +85,11 @@ namespace AutoMarket.Api.Repostories
         {
             entity.Delete();
             _dbContext.Set<T>().Remove(entity);
+        }
+
+        public async Task SaveChangeAsync(CancellationToken ct = default)
+        {
+            await _dbContext.SaveChangesAsync(ct);
         }
     }
 }

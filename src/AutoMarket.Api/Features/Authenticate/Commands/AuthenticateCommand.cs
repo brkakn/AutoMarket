@@ -7,12 +7,7 @@ using AutoMarket.Api.Models.Exceptions;
 using AutoMarket.Api.Repostories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,9 +41,9 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
             _cacheService = cacheService;
         }
 
-        public async Task<TokenModel> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
+        public async Task<TokenModel> Handle(AuthenticateCommand request, CancellationToken ct)
         {
-            var user = await _userRepository.AuthenticateUser(request.UserName, request.Password, cancellationToken);
+            var user = await _userRepository.AuthenticateUser(request.UserName, request.Password, ct);
             if (user == null)
                 throw new BadRequestException("UserName or Password wrong!");
 

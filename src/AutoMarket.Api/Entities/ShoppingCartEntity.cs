@@ -8,5 +8,11 @@ namespace AutoMarket.Api.Entities
         public long UserId { get; set; }
         public decimal Amount { get; set; }
         public ICollection<ShoppingCartDetailEntity> ShoppingCartDetails { get; set; }
+
+        public void AddAmount(decimal amount)
+        {
+            Amount += amount;
+            Update();
+        }
     }
 }
