@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Serilog;
 using System;
@@ -27,7 +28,6 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
             if ((end - start).TotalMilliseconds > 1000)
             {
                 context.Request.EnableBuffering();
-                var token = context.Request.Headers["token"].FirstOrDefault();
                 var body = context.Request.Body;
                 var payload = "";
                 if (body.CanSeek)
@@ -36,12 +36,14 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
                     payload = body.Length != 0 ? new StreamReader(body).ReadToEnd() : "";
                 }
 
+                var userModel = context.RequestServices.GetService(typeof(UserModel)) as UserModel;
+
                 var log = new
                 {
                     RequestTime = start,
                     EndTime = end,
                     Duration = (end - start).TotalMilliseconds,
-                    Token = token,
+                    Issuer = userModel?.UserName,
                     Payload = payload,
                     QueryString = context.Request.QueryString.Value,
                     Path = context.Request.Path,
