@@ -36,17 +36,20 @@ namespace AutoMarket.Api.Features.ShoppingCart.Commands
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
         public AddItemCommandHandler(
             IShoppingCartDetailRepository cartDetailRepository,
             IShoppingCartRepository cartRepository,
             IStockRepository stockRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IMediator mediator)
         {
             _shoppingCartDetailRepository = cartDetailRepository;
             _shoppingCartRepository = cartRepository;
             _stockRepository = stockRepository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         protected override async Task Handle(AddItemCommand request, CancellationToken ct)
@@ -61,6 +64,8 @@ namespace AutoMarket.Api.Features.ShoppingCart.Commands
 
             stock.ReduceFreeQuantity(request.Quantity);
             await _shoppingCartDetailRepository.SaveChangeAsync(ct);
+
+            await _mediator.Send(new UpdateShoppingCartCacheCommand(request.UserId), ct);
         }
     }
 }

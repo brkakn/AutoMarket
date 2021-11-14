@@ -50,6 +50,9 @@ namespace AutoMarket.Api.Infrastructures.Database
                 e.HasOne(x => x.ShoppingCart)
                  .WithMany(x => x.ShoppingCartDetails)
                  .HasForeignKey(x => x.ShoppingCartId);
+                e.HasOne(x => x.Item)
+                 .WithMany(x => x.ShoppingCartDetails)
+                 .HasForeignKey(x => x.ItemId);
                 e.Property(p => p.RowVersion).IsRowVersion();
             });
         }

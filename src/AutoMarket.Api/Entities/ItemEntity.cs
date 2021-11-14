@@ -10,5 +10,6 @@ namespace AutoMarket.Api.Entities
         public string Code { get; set; }
         public decimal Price { get; set; }
         public ICollection<StockEntity> Stocks { get; set; }
+        public ICollection<ShoppingCartDetailEntity> ShoppingCartDetails { get; set; }
     }
 }

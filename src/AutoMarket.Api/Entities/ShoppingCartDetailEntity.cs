@@ -19,6 +19,7 @@ namespace AutoMarket.Api.Entities
             ShoppingCart.AddAmount(quantity * Item.Price);
             Update();
         }
+
         public void ChangeQuantity(int quantity)
         {
             ShoppingCart.AddAmount((quantity - Quantity) * Item.Price);
