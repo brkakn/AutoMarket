@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace AutoMarket.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace AutoMarket.Api.Models.Exceptions
     {
         public BadRequestException()
         {
-            ProblemDetailsModel.Title = "Error Occured";
-            ProblemDetailsModel.Detail = "Status for error occurred";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstants.BAD_REQUEST_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstants.BAD_REQUEST_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }
         public BadRequestException(string message) : base(message)
@@ -21,7 +22,7 @@ namespace AutoMarket.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }
 
-        public BadRequestException(string title, List<string> messages) : base(title, messages)
+        public BadRequestException(List<string> messages, string title) : base(messages, title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }

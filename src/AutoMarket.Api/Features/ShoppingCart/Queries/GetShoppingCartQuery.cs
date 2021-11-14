@@ -43,11 +43,11 @@ namespace AutoMarket.Api.Features.ShoppingCart.Queries
         {
             if(request.FromCache)
             {
-                var shoppingCartModel = await _cacheService.Get<ShoppingCartModel>($"{CacheConstants.CartInfo}{request.UserId}");
+                var shoppingCartModel = await _cacheService.Get<ShoppingCartModel>($"{CacheConstants.CART_INFO}{request.UserId}");
                 if(shoppingCartModel == null)
                 {
                     var shoppingCart = await _shoppingCartRepository.GetWithDetailByUserIdAsync(request.UserId, false, ct);
-                    await _cacheService.Add($"{CacheConstants.CartInfo}{request.UserId}", shoppingCart);
+                    await _cacheService.Add($"{CacheConstants.CART_INFO}{request.UserId}", shoppingCart);
                     return _mapper.Map<ShoppingCartModel>(shoppingCart);
                 }
                 return shoppingCartModel;

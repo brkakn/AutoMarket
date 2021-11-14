@@ -41,7 +41,7 @@ namespace AutoMarket.Api.Features.ShoppingCart.Commands
 
             var shoppingCartModel = _mapper.Map<ShoppingCartModel>(shoppingCart);
 
-            await _cacheService.Add($"{CacheConstants.CartInfo}{request.UserId}", shoppingCartModel);
+            await _cacheService.Add($"{CacheConstants.CART_INFO}{request.UserId}", shoppingCartModel);
         }
     }
 }

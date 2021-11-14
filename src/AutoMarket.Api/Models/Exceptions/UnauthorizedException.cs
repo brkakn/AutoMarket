@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace AutoMarket.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace AutoMarket.Api.Models.Exceptions
     {
         public UnauthorizedException()
         {
-            ProblemDetailsModel.Title = "Unauthorized";
-            ProblemDetailsModel.Detail = "Status for unauthorized request";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstants.UNAUTHORIZED_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstants.UNAUTHORIZED_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }
 
@@ -22,7 +23,7 @@ namespace AutoMarket.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }
 
-        public UnauthorizedException(string title, List<string> messages) : base(title, messages)
+        public UnauthorizedException(List<string> messages, string title) : base(messages, title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }

@@ -49,7 +49,7 @@ namespace AutoMarket.Api.Features.Authenticate.Commands
 
             var token = SecurityHelper.GenerateToken(user, _appSettingsModel.Secret);
 
-            await _cacheService.Add($"{CacheConstants.UserInfo}{user.Id}", token, TimeSpan.FromHours(6));
+            await _cacheService.Add($"{CacheConstants.USER_INFO}{user.Id}", token, TimeSpan.FromHours(6));
 
             return new TokenModel(token);
         }

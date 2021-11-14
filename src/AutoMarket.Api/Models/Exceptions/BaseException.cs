@@ -25,17 +25,14 @@ namespace AutoMarket.Api.Models.Exceptions
         {
             ProblemDetailsModel.Status = StatusCodes.Status500InternalServerError;
             ProblemDetailsModel.Detail = string.Join("/ ", messages);
-            //ProblemDetailsModel.Extensions.Add("messages", messages);
             ProblemDetailsModel.Extensions.Add("DocumentUrl", "http://localhost:5000/swagger/index.html");
         }
 
-        public BaseException(string title, List<string> messages)
+        public BaseException(List<string> messages, string title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status500InternalServerError;
             ProblemDetailsModel.Title = title;
             ProblemDetailsModel.Detail = string.Join("/ ", messages);
-            //ProblemDetailsModel.Detail = JsonConvert.SerializeObject(messages, Formatting.Indented);
-            //ProblemDetailsModel.Extensions.Add("messages", messages);
             ProblemDetailsModel.Extensions.Add("DocumentUrl", "http://localhost:5000/swagger/index.html");
         }
 

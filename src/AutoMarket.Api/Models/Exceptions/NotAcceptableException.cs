@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace AutoMarket.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace AutoMarket.Api.Models.Exceptions
     {
         public NotAcceptableException()
         {
-            ProblemDetailsModel.Title = "Request Invalid Format";
-            ProblemDetailsModel.Detail = "Status for request invalid format";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstants.NOTACCEPTABLE_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstants.NOTACCEPTABLE_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }
 
@@ -22,7 +23,7 @@ namespace AutoMarket.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }
 
-        public NotAcceptableException(string title, List<string> messages) : base(title, messages)
+        public NotAcceptableException(List<string> messages, string title) : base(messages, title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }

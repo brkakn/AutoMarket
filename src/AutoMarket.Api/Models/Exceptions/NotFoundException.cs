@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace AutoMarket.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace AutoMarket.Api.Models.Exceptions
     {
         public NotFoundException()
         {
-            ProblemDetailsModel.Title = "Not Found";
-            ProblemDetailsModel.Detail = "Status for not found";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstants.NOTFOUND_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstants.NOTFOUND_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }
 
@@ -22,7 +23,7 @@ namespace AutoMarket.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }
 
-        public NotFoundException(string title, List<string> messages) : base(title, messages)
+        public NotFoundException(List<string> messages, string title) : base(messages, title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }

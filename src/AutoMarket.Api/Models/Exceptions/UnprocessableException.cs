@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMarket.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace AutoMarket.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace AutoMarket.Api.Models.Exceptions
     {
         public UnprocessableException()
         {
-            ProblemDetailsModel.Title = "Request Model Invalid or Missing";
-            ProblemDetailsModel.Detail = "Status for request model invalid or missing";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstants.UNPROCCESABLE_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstants.UNPROCCESABLE_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }
 
@@ -22,7 +23,7 @@ namespace AutoMarket.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }
 
-        public UnprocessableException(string title, List<string> messages) : base(title, messages)
+        public UnprocessableException(List<string> messages, string title) : base(messages, title)
         {
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }

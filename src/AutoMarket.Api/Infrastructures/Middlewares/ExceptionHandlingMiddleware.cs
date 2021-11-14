@@ -37,7 +37,7 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
             catch (Exception exception)
             {
                 context.Response.ContentType = "application/problem+json";
-                var baseException = exception is BaseException ? (BaseException)exception : new InternalServerError();
+                var baseException = exception is BaseException ? (BaseException)exception : new InternalServerErrorException();
                 baseException.ProblemDetailsModel.Instance = context.Request.Path;
                 baseException.ProblemDetailsModel.Type = context.Request.Path;
                 context.Response.StatusCode = baseException.ProblemDetailsModel.Status.Value;

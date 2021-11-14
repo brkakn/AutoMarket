@@ -38,7 +38,7 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
 
             var userModel = SecurityHelper.ValidateToken(token, _appSettings.Secret);
 
-            var cacheToken = await _cacheService.Get<string>($"{CacheConstants.UserInfo}{userModel?.Id}");
+            var cacheToken = await _cacheService.Get<string>($"{CacheConstants.USER_INFO}{userModel?.Id}");
             if (string.IsNullOrEmpty(cacheToken) || cacheToken != token)
                 throw new UnauthorizedException("Token is expired or invalid");
 
