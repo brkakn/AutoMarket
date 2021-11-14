@@ -6,8 +6,8 @@ namespace AutoMarket.Api.Entities
     public class StockEntity : BaseEntity
     {
         public long ItemId { get; set; }
-        public long Quantity { get; set; }
-        public long FreeQuantity { get; set; }
+        public int Quantity { get; set; }
+        public int FreeQuantity { get; set; }
         [ForeignKey("ItemId")]
         public ItemEntity Item { get; set; }
 

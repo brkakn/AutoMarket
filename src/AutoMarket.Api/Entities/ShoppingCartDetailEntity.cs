@@ -8,6 +8,7 @@ namespace AutoMarket.Api.Entities
         public long ShoppingCartId { get; set; }
         public long ItemId { get; set; }
         public int Quantity { get; set; }
+        public decimal Amount { get; set; }
         [ForeignKey("ShoppingCartId")]
         public ShoppingCartEntity ShoppingCart { get; set; }
         [ForeignKey("ItemId")]
@@ -15,16 +16,30 @@ namespace AutoMarket.Api.Entities
 
         public void AddQuantity(int quantity)
         {
+            var price = GetPrice();
+            AddAmount(quantity, price);
             Quantity += quantity;
-            ShoppingCart.AddAmount(quantity * Item.Price);
-            Update();
         }
 
         public void ChangeQuantity(int quantity)
         {
-            ShoppingCart.AddAmount((quantity - Quantity) * Item.Price);
+            var price = GetPrice();
+            AddAmount((quantity - Quantity));
             Quantity = quantity;
+        }
+
+        public void AddAmount(int quantity, decimal? price = null)
+        {
+            if (!price.HasValue)
+                price = GetPrice();
+            Amount += price.Value * quantity;
+            ShoppingCart.AddAmount(price.Value * quantity);
             Update();
+        }
+
+        public decimal GetPrice()
+        {
+            return Amount / Quantity;
         }
     }
 }
