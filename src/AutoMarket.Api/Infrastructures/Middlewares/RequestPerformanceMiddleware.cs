@@ -33,7 +33,7 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
                 if (body.CanSeek)
                 {
                     body.Seek(0, SeekOrigin.Begin);
-                    payload = body.Length != 0 ? new StreamReader(body).ReadToEnd() : "";
+                    payload = body.Length != 0 ? await new StreamReader(body).ReadToEndAsync() : "";
                 }
 
                 var userModel = context.RequestServices.GetService(typeof(UserModel)) as UserModel;

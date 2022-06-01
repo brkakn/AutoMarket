@@ -52,7 +52,7 @@ namespace AutoMarket.Api.Infrastructures.Middlewares
                 if (body.CanSeek)
                 {
                     body.Seek(0, SeekOrigin.Begin);
-                    payload = new StreamReader(body).ReadToEnd();
+                    payload = await new StreamReader(body).ReadToEndAsync();
                 }
 
                 var log = new
